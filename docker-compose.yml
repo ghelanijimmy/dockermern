@@ -1,0 +1,35 @@
+version: "3"
+services:
+
+    mongo:
+        image: mongo
+        restart: always
+        container_name: mongodb
+        volumes:
+          - ./db:/data/db
+        ports:
+            - "27018:27017"
+    
+    client:
+        build:
+            ./client
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./client:/usr/src/client
+        command: npm start
+
+    server:
+        depends_on:
+          - mongo
+        build:
+            ./server
+        ports:
+            - "5001:5001"
+        volumes:
+            - ./server:/usr/src/server
+        links:
+            - mongo
+        command: npm start
+        env_file:
+          - ./server/.env
