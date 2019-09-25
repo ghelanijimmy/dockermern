@@ -1,13 +1,15 @@
 FROM node:latest
 
+RUN mkdir -p /usr/src/server
+
 WORKDIR /usr/src/server
 
-COPY package.json ./
+COPY package.json /usr/src/server/
 
 RUN npm install
 
-COPY . .
+COPY . /usr/src/server/
 
 EXPOSE 5001
 
-#CMD ["npm", "start"]
+CMD ["npm", "start"]

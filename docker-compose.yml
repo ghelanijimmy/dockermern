@@ -18,6 +18,8 @@ services:
         volumes:
             - ./client:/usr/src/client
         command: npm start
+        links:
+          - server
 
     server:
         depends_on:

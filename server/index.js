@@ -1,16 +1,22 @@
-const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const dotenv = require("dotenv");
+const router = require("./routes/routes");
+const express = require("express");
 
-require("dotenv").config();
+// const Schema = mongoose.Schema;
+
+dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
 const dburl = process.env.DBURL;
 const port = process.env.PORT || 5001;
+
+console.log(dburl);
 
 mongoose
   .connect("mongodb://mongodb:27017/dockermern", {
@@ -30,31 +36,14 @@ connection.on("error", err => {
   // mongoose.connect(dburl, { useNewUrlParser: true });
 });
 
-const userSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  }
-});
+//
+// app.post("/check", (req, res) => {
+//   User.findOne({ name: req.body.name }, (err, data) => {
+//     res.json(data);
+//   });
+// });
 
-const User = mongoose.model("User", userSchema);
 
-app.get("/", (req, res) => res.json("test"));
-
-app.post("/add", (req, res) => {
-  let newName = new User({
-    name: "Jimmy"
-  });
-  newName
-    .save()
-    .then(data => res.json(data))
-    .catch(err => res.json(err));
-});
-
-app.post("/check", (req, res) => {
-  User.findOne({ name: req.body.name }, (err, data) => {
-    res.json(data);
-  });
-});
+app.use("/", router);
 
 app.listen(port, () => console.log(`Express started on port ${port}`));

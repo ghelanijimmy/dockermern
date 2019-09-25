@@ -1,13 +1,15 @@
 FROM node:latest
 
+RUN mkdir -p /usr/src/client
+
 WORKDIR /usr/src/client
 
-COPY package*.json ./
+COPY package*.json /usr/src/client/
 
 RUN npm install
 
-COPY . .
+COPY . /usr/src/client/
 
 EXPOSE 3000
 
-CMD npm start
+CMD ["npm", "start"]
